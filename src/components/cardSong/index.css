@@ -1,0 +1,49 @@
+.cardSong {
+  margin: 20px auto;
+  display: flex;
+  width: 800px;
+  height: 150px;
+  padding: 10px;
+  border: solid 1px rgb(197, 197, 197);
+  border-radius: 10px;
+  box-shadow: 5px 3px 20px rgb(221, 221, 221);
+  color: rgb(97, 97, 97);
+}
+
+.cardImage {
+  width: 120px;
+  display: flex;
+}
+
+.cardImage img {
+  width: 120px;
+}
+
+.cardInfo {
+  width: 560px;
+  line-height: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 20px;
+}
+.cardInfo h1 {
+  font-size: 22px;
+}
+
+.cardButton {
+  display: flex;
+  width: 120px;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardButton button {
+  margin: 20pxauto;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(7, 187, 127);
+  color: aliceblue;
+  font-weight: bold;
+}
