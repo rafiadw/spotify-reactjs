@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import CardSong from "../card-song/index";
-import Search from "../search-bar/index";
+import CardSong from "../../components/card-song/index";
+import Search from "../../components/search-bar/index";
 
 function Spotify() {
   const CLIENT_ID = "8f9fc624420548318eaed2f767f81eb0";
