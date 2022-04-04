@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import CardSong from "../../components/card-song/index";
 import Search from "../../components/search-bar/index";
+import CreatePlaylist from "../../components/create-playlist/index";
 
 function Spotify() {
   const CLIENT_ID = "8f9fc624420548318eaed2f767f81eb0";
@@ -14,6 +15,11 @@ function Spotify() {
   const [tracks, setTracks] = useState([]);
   const [selectedTracksUri, setSelectedTracksUri] = useState([]);
   const [isInSearch, setIsInSearch] = useState(false);
+
+  const [playlist, setPlaylist] = useState({
+    title: "",
+    desc: "",
+  });
 
   useEffect(() => {
     if (!isInSearch) {
@@ -57,17 +63,20 @@ function Spotify() {
           },
         }
       );
+      console.log(tracks);
       setIsInSearch(true);
       const data = await response.data.tracks.items;
       const selectedTracks = tracks.filter((track) =>
         selectedTracksUri.includes(track.uri)
       );
+      console.log(selectedTracks);
       const searchedTracks = data.filter(
         (track) => !selectedTracksUri.includes(track.uri)
       );
-
+      console.log(searchedTracks);
       setTracks([...selectedTracks, ...searchedTracks]);
-      console.log(data);
+      console.log(tracks);
+      console.log([...selectedTracks, ...searchedTracks]);
     } catch (error) {
       alert(error);
     }
@@ -81,7 +90,6 @@ function Spotify() {
   const handleLogin = () => {
     const url = `${SPOTIFY_AUTHORIZE_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPE}&response_type=token&show_dialog=true`;
     window.location = url;
-    console.log(url);
   };
 
   const toggleSelect = (track) => {
@@ -106,6 +114,11 @@ function Spotify() {
     ));
   };
 
+  const handleFormPlaylist = (event) => {
+    const inputValue = event.target.value;
+    setPlaylist({ ...playlist, inputValue });
+  };
+
   return (
     <div>
       {!token ? (
@@ -115,7 +128,14 @@ function Spotify() {
       )}
 
       {token ? (
-        <Search handleOnChange={inputHandle} handleOnSubmit={handleSearch} />
+        <>
+          <Search handleOnChange={inputHandle} handleOnSubmit={handleSearch} />
+          <CreatePlaylist
+            playlist={playlist}
+            handleOnChange={handleFormPlaylist}
+            handleOnSubmit={handleSearch}
+          />
+        </>
       ) : (
         <h2>{tracks}</h2>
       )}
