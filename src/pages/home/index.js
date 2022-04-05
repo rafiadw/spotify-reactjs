@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import CardSong from "../../components/card-song/index";
 import Search from "../../components/search-bar/index";
 import CreatePlaylist from "../../components/create-playlist/index";
+import useSearch from "../../hooks/useSearch";
 
 function Spotify() {
   const CLIENT_ID = "8f9fc624420548318eaed2f767f81eb0";
@@ -10,81 +11,35 @@ function Spotify() {
   const SCOPE = "playlist-modify-private";
   const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize";
 
-  const [token, setToken] = useState("");
-  const [searchQuery, setSearhcQuery] = useState("");
-  const [tracks, setTracks] = useState([]);
-  const [selectedTracksUri, setSelectedTracksUri] = useState([]);
-  const [isInSearch, setIsInSearch] = useState(false);
-
+  const {
+    token,
+    setToken,
+    isInSearch,
+    inputHandle,
+    handleSearch,
+    tracks,
+    setTracks,
+    setSelectedTracksUri,
+    selectedTracksUri,
+    userID,
+  } = useSearch();
   const [playlist, setPlaylist] = useState({
     title: "",
     desc: "",
   });
 
-  useEffect(() => {
-    if (!isInSearch) {
-      const selectedTracks = tracks.filter((track) =>
-        selectedTracksUri.includes(track.uri)
-      );
-      setTracks(selectedTracks);
-    }
-  }, [selectedTracksUri]);
-
-  useEffect(() => {
-    const hash = window.location.hash;
-    let token = window.localStorage.getItem("token");
-
-    if (!token && hash) {
-      token = hash
-        .substring(1)
-        .split("&")
-        .find((elem) => elem.startsWith("access_token"))
-        .split("=")[1];
-
-      window.location.hash = "";
-      window.localStorage.setItem("token", token);
-    }
-    setToken(token);
-  }, []);
+  // useEffect(() => {
+  //   if (!isInSearch) {
+  //     const selectedTracks = tracks.filter((track) =>
+  //       selectedTracksUri.includes(track.uri)
+  //     );
+  //     setTracks(selectedTracks);
+  //   }
+  // }, [selectedTracksUri]);
 
   const handleLogout = () => {
     setToken("");
     window.localStorage.removeItem("token");
-  };
-
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.get(
-        `https://api.spotify.com/v1/search?type=track&q=${searchQuery}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(tracks);
-      setIsInSearch(true);
-      const data = await response.data.tracks.items;
-      const selectedTracks = tracks.filter((track) =>
-        selectedTracksUri.includes(track.uri)
-      );
-      console.log(selectedTracks);
-      const searchedTracks = data.filter(
-        (track) => !selectedTracksUri.includes(track.uri)
-      );
-      console.log(searchedTracks);
-      setTracks([...selectedTracks, ...searchedTracks]);
-      console.log(tracks);
-      console.log([...selectedTracks, ...searchedTracks]);
-    } catch (error) {
-      alert(error);
-    }
-  };
-
-  const inputHandle = (e) => {
-    const inputValue = e.target.value;
-    setSearhcQuery(inputValue);
   };
 
   const handleLogin = () => {
@@ -93,30 +48,95 @@ function Spotify() {
   };
 
   const toggleSelect = (track) => {
-    const uri = track.uri;
+    const uri = tracks.find((item) => item.uri === track.uri);
     if (selectedTracksUri.includes(uri)) {
-      setSelectedTracksUri(selectedTracksUri.filter((item) => item !== uri));
+      setSelectedTracksUri(
+        selectedTracksUri.filter((item) => item.uri !== track.uri)
+      );
     } else {
       setSelectedTracksUri([...selectedTracksUri, uri]);
     }
   };
+  const tes = tracks.filter(
+    (item) => item.uri !== "spotify:track:2hHeGD57S0BcopfVcmehdl"
+  );
+  console.log(tes);
+  console.log(tracks);
+  console.log(selectedTracksUri);
 
   const renderTracks = () => {
-    return tracks.map((item) => (
-      <CardSong
-        image={item.album.images[0].url}
-        album={item.album.name}
-        artist={item.album.artists[0]?.name}
-        title={item.name}
-        key={item.id}
-        toggleSelect={() => toggleSelect(item)}
-      />
-    ));
+    return tracks
+      .filter((item) => item.uri !== selectedTracksUri.uri)
+      .map((item) => (
+        <CardSong
+          image={item.album.images[0].url}
+          album={item.album.name}
+          artist={item.album.artists[0]?.name}
+          title={item.name}
+          key={item.id}
+          toggleSelect={() => toggleSelect(item)}
+        />
+      ));
+  };
+  console.log(playlist.desc);
+  const handleFormPlaylist = (event) => {
+    const { name, value } = event.target;
+    setPlaylist({ ...playlist, [name]: value });
   };
 
-  const handleFormPlaylist = (event) => {
-    const inputValue = event.target.value;
-    setPlaylist({ ...playlist, inputValue });
+  const createPlaylist = async (e) => {
+    const data = JSON.stringify({
+      name: "input.playlistTitle",
+      description: "input.playlistDesc",
+      public: false,
+      collaborative: false,
+    });
+
+    const headerConfig = {
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    };
+
+    const response = await axios.post(
+      `https://api.spotify.com/v1/users/${userID}/playlists`,
+      data,
+      headerConfig
+    );
+    return response.data.id;
+  };
+
+  const AddMusicToCreatedPlaylist = async (playListID) => {
+    let uris = selectedTracksUri;
+    console.log("PlayListID");
+    console.log(playListID);
+    console.log(uris);
+    const data = JSON.stringify({
+      uris,
+    });
+
+    const headerConfig = {
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    };
+
+    console.log(data);
+    const response = await axios.post(
+      `https://api.spotify.com/v1/playlists/${playListID}/tracks`,
+      data,
+      headerConfig
+    );
+    console.log(response);
+  };
+
+  const createAndAddToPlaylist = async (e) => {
+    e.preventDefault();
+    const playListID = await createPlaylist();
+    await AddMusicToCreatedPlaylist(playListID);
+    alert("PlayList Created");
   };
 
   return (
@@ -133,14 +153,13 @@ function Spotify() {
           <CreatePlaylist
             playlist={playlist}
             handleOnChange={handleFormPlaylist}
-            handleOnSubmit={handleSearch}
+            handleOnSubmit={createAndAddToPlaylist}
           />
+          {renderTracks()}
         </>
       ) : (
-        <h2>{tracks}</h2>
+        <h2>Welcome</h2>
       )}
-
-      {renderTracks()}
     </div>
   );
 }
