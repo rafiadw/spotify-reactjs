@@ -1,13 +1,15 @@
 import "./index.css";
 import { useState } from "react";
 
-function CardSong({ image, album, title, artist, toggleSelect }) {
-  const [isSelected, setIsSelected] = useState(false);
-
-  const handleSelect = () => {
-    setIsSelected(!isSelected);
-    toggleSelect();
-  };
+function CardSong({
+  image,
+  album,
+  title,
+  artist,
+  selectedHandle,
+  toggleSelect,
+  buttonName,
+}) {
   return (
     <div className="cardSong">
       <div className="cardImage">
@@ -23,8 +25,8 @@ function CardSong({ image, album, title, artist, toggleSelect }) {
         </p>
       </div>
       <div className="cardButton">
-        <button onClick={handleSelect}>
-          {isSelected ? "Deselect" : "Select"}
+        <button onClick={() => selectedHandle(toggleSelect)}>
+          {buttonName}
         </button>
       </div>
     </div>

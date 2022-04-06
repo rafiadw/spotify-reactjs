@@ -12,9 +12,9 @@ const CreatePlaylist = ({ playlist, handleOnChange, handleOnSubmit }) => {
       />
       <br />
       <textarea
-        id="decs"
-        name="decs"
-        value={playlist.desc}
+        id="description"
+        name="description"
+        value={playlist.description}
         type="text"
         onChange={handleOnChange}
         placeholder="Playlist Description"
