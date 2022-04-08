@@ -1,9 +1,21 @@
+import "./style.css";
+
 const Search = ({ handleOnSubmit, handleOnChange }) => {
   return (
-    <form onSubmit={handleOnSubmit}>
-      <input id="gifname" type="text" onChange={handleOnChange} />
-      <button type="submit">Search</button>
-    </form>
+    <div className="formSearch">
+      <form onSubmit={handleOnSubmit}>
+        <input
+          className="inputSearch"
+          id="gifname"
+          type="text"
+          onChange={handleOnChange}
+          placeholder="Search"
+        />
+        <button className="buttonSearch" type="submit">
+          Search
+        </button>
+      </form>
+    </div>
   );
 };
 

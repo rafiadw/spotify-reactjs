@@ -5,6 +5,7 @@ const useSearch = () => {
   const [searchQuery, setSearhcQuery] = useState("");
   const [tracks, setTracks] = useState([]);
   const [token, setToken] = useState("");
+  const [selectedTrack, setSelectedTrack] = useState([]);
 
   useEffect(() => {
     const token = new URLSearchParams(window.location.hash).get(
@@ -30,8 +31,11 @@ const useSearch = () => {
           type: "track",
         },
       });
+
       const data = await response.data.tracks.items;
-      setTracks(data);
+      const before = tracks.filter((item) => selectedTrack.includes(item.uri));
+      const after = data.filter((item) => !selectedTrack.includes(item.uri));
+      setTracks([...before, ...after]);
     } catch (error) {
       alert(error);
     }
@@ -43,6 +47,8 @@ const useSearch = () => {
     searchHandle,
     token,
     setToken,
+    selectedTrack,
+    setSelectedTrack,
   };
 };
 

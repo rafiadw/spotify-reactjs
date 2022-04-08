@@ -5,31 +5,19 @@ import Search from "../../components/search-bar/index";
 import CreatePlaylist from "../../components/create-playlist/index";
 import useSearch from "../../hooks/useSearch";
 import { useSelector, useDispatch } from "react-redux";
-import { saveToken } from "../../redux/token-action";
+import { login } from "../../redux/token-slicer";
 
 function Spotify() {
-  const CLIENT_ID = "8f9fc624420548318eaed2f767f81eb0";
-  const REDIRECT_URI = "http://localhost:3000/callback";
-  const SCOPE = "playlist-modify-private";
-  const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize";
-  const AUTH_URL = `${SPOTIFY_AUTHORIZE_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPE}&response_type=token&show_dialog=true`;
-  const getToken = new URLSearchParams(window.location.hash).get(
-    "#access_token"
-  );
-  const { tracks, inputHandle, searchHandle, token, setToken } = useSearch();
+  const { tracks, inputHandle, searchHandle, selectedTrack, setSelectedTrack } =
+    useSearch();
   const [playlist, setPlaylist] = useState({
     title: "",
     description: "",
   });
-  const [selectedTrack, setSelectedTrack] = useState([]);
+  const [playlistID, setPlaylistID] = useState("");
 
-  const access_token = useSelector((state) => state.token.value);
-  const dispatch = useDispatch();
-  dispatch(saveToken(getToken));
-
-  const handleLogout = () => {
-    setToken("");
-  };
+  const tokenValue = useSelector((state) => state.token.value);
+  const userID = useSelector((state) => state.token.user);
 
   const selectedHandle = (uri) => {
     setSelectedTrack((item) => item.filter((id) => id !== uri));
@@ -52,37 +40,107 @@ function Spotify() {
         artist={item.album.artists[0]?.name}
         title={item.name}
         key={item.id}
-        toggleSelect={selectedTrack.includes(item.uri)}
-        selectedHandle={(selectedHandle) =>
-          selectedHandle ? selectedHandle(item.uri) : deselectedHandle(item.uri)
+        selectedHandle={() =>
+          selectedTrack.includes(item.uri)
+            ? selectedHandle(item.uri)
+            : deselectedHandle(item.uri)
         }
         buttonName={selectedTrack.includes(item.uri) ? "deselect" : "select"}
       />
     ));
   };
 
+  const createPlaylist = async () => {
+    try {
+      const response = await axios.post(
+        `https://api.spotify.com/v1/users/${userID}/playlists`,
+        {
+          name: playlist.title,
+          description: playlist.description,
+          public: false,
+          collaborative: false,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + tokenValue,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Playlist ID");
+      console.log(response.data.id);
+      setPlaylistID(response.data.id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addItemToPlaylist = async () => {
+    try {
+      let uri = selectedTrack;
+      const data = {
+        uris: selectedTrack,
+      };
+
+      const header = {
+        headers: {
+          Authorization: "Bearer " + tokenValue,
+          "Content-Type": "application/json",
+        },
+      };
+
+      const response = await axios.post(
+        `https://api.spotify.com/v1/playlists/${playlistID}/tracks`,
+        data,
+        header
+      );
+      console.log("response add music :", response);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const handleCreatePlaylist = async (e) => {
+    e.preventDefault();
+    if (selectedTrack.length === 0) {
+      alert("select track please");
+    } else {
+      console.log("getUser");
+      console.log(userID);
+      console.log("create playlist");
+
+      await createPlaylist();
+      console.log(playlistID);
+      console.log("add song");
+      await addItemToPlaylist();
+    }
+  };
+
+  console.log("user id : ", userID);
+  console.log("playlist id : ", playlistID);
+
   return (
     <div>
-      {!token ? (
+      {/* {!tokenValue && (
         <button>
-          <a href={AUTH_URL}>Login</a>
+          <a href={AUTH_URL}>login</a>
         </button>
-      ) : (
-        <button onClick={handleLogout}>Logout</button>
-      )}
+      )} */}
 
-      {token ? (
-        <>
-          <Search handleOnChange={inputHandle} handleOnSubmit={searchHandle} />
-          <CreatePlaylist
-            playlist={playlist}
-            handleOnChange={handleFormPlaylist}
-          />
-          {renderTracks()}
-        </>
-      ) : (
+      {/* {tokenValue ? ( */}
+      <>
+        <CreatePlaylist
+          playlist={playlist}
+          handleOnChange={handleFormPlaylist}
+          handleOnSubmit={handleCreatePlaylist}
+        />
+        {/* {renderPilih()} */}
+        <Search handleOnChange={inputHandle} handleOnSubmit={searchHandle} />
+        {renderTracks()}
+      </>
+      {/* ) : (
         <h2>Welcome</h2>
-      )}
+      )} */}
     </div>
   );
 }

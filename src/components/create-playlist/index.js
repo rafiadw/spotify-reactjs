@@ -1,7 +1,10 @@
+import "./style.css";
+
 const CreatePlaylist = ({ playlist, handleOnChange, handleOnSubmit }) => {
   return (
-    <form onSubmit={handleOnSubmit}>
+    <form onSubmit={handleOnSubmit} className="formPlaylist">
       <input
+        className="titlePlaylist"
         minLength={10}
         id="title"
         name="title"
@@ -9,18 +12,23 @@ const CreatePlaylist = ({ playlist, handleOnChange, handleOnSubmit }) => {
         type="text"
         onChange={handleOnChange}
         placeholder="Playlist Title"
+        required
       />
       <br />
       <textarea
+        className="descriptionPlaylist"
         id="description"
         name="description"
         value={playlist.description}
         type="text"
         onChange={handleOnChange}
         placeholder="Playlist Description"
+        required
       />
       <br />
-      <button type="submit">Create Playlist</button>
+      <button className="createPlaylist" type="submit">
+        Create Playlist
+      </button>
     </form>
   );
 };

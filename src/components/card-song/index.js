@@ -1,5 +1,4 @@
-import "./index.css";
-import { useState } from "react";
+import "./style.css";
 
 function CardSong({
   image,
@@ -16,7 +15,7 @@ function CardSong({
         <img src={image} alt={title} />
       </div>
       <div className="cardInfo">
-        <p>
+        <p className="album">
           Album <strong>{album}</strong>
         </p>
         <h1>{title}</h1>
