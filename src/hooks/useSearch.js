@@ -1,18 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const useSearch = () => {
   const [searchQuery, setSearhcQuery] = useState("");
   const [tracks, setTracks] = useState([]);
-  const [token, setToken] = useState("");
   const [selectedTrack, setSelectedTrack] = useState([]);
 
-  useEffect(() => {
-    const token = new URLSearchParams(window.location.hash).get(
-      "#access_token"
-    );
-    setToken(token);
-  }, []);
+  const token = useSelector((state) => state.auth.accessToken);
 
   const inputHandle = (e) => {
     const inputValue = e.target.value;
@@ -45,8 +40,6 @@ const useSearch = () => {
     tracks,
     inputHandle,
     searchHandle,
-    token,
-    setToken,
     selectedTrack,
     setSelectedTrack,
   };

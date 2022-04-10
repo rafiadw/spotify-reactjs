@@ -1,35 +1,45 @@
 import "./App.css";
-// import Data from './data/data'
-// import Card from './components/cardSong/index';
 import Spotify from "./pages/home/index";
-import store from "./redux/store";
-import { Provider } from "react-redux";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Login from "./pages/login/index";
-import { useSelector } from "react-redux";
+import NotFound from "./pages/not-found";
+import getTokenURL from "./services/get-token";
+import { useSelector, useDispatch } from "react-redux";
+import { login } from "./redux/auth-slicer";
+import { useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 
 function App() {
-  const url = `https://gist.githubusercontent.com/aryapradipta9/e6492383477803b233916e01f36d5465/raw/66942c739d66d3774303f84071696aa865a07077/single-sample.json`;
-  fetch(url).then((response) => console.log(response.data));
-  const tokenValue = useSelector((state) => state.token.value);
+  const isLogin = useSelector((state) => state.auth.isLogin);
+  const token = useSelector((state) => state.auth.accessToken);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!isLogin && window.location.hash) {
+      dispatch(login(getTokenURL(window.location.hash)));
+    }
+    console.log(isLogin);
+    console.log("token value:", token);
+  }, [isLogin]);
+
   return (
-    <Provider store={store}>
-      <div className="App">
-        <Router>
-          <Switch>
-            <Route path="/create-playlist">
-              <Spotify />
-            </Route>
-            <Route path="/">
-              <h1>Welcome to our homepage</h1>
-              <Link to="/create-playlist">
-                <Login />
-              </Link>
-            </Route>
-          </Switch>
-        </Router>
-      </div>
-    </Provider>
+    <Router>
+      <Switch>
+        <Route path="/create-playlist">
+          {isLogin ? <Spotify /> : <Redirect to="/" />}
+        </Route>
+        <Route path="/">
+          {isLogin ? <Redirect to="/create-playlist" /> : <Login />}
+        </Route>
+        <Route>
+          <NotFound />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 

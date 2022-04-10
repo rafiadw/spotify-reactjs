@@ -38,5 +38,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {
+    "eslint": "^8.13.0"
+  },
+  "main": "index.js",
+  "repository": "https://github.com/rafiadw/hw-mod1-ses3-generasi-GIGIH.git",
+  "author": "rafiadw <rafiadw@gmail.com>",
+  "license": "MIT"
 }

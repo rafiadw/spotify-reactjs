@@ -4,8 +4,7 @@ import CardSong from "../../components/card-song/index";
 import Search from "../../components/search-bar/index";
 import CreatePlaylist from "../../components/create-playlist/index";
 import useSearch from "../../hooks/useSearch";
-import { useSelector, useDispatch } from "react-redux";
-import { login } from "../../redux/token-slicer";
+import { useSelector } from "react-redux";
 
 function Spotify() {
   const { tracks, inputHandle, searchHandle, selectedTrack, setSelectedTrack } =
@@ -14,10 +13,13 @@ function Spotify() {
     title: "",
     description: "",
   });
+  const [userID, setUserID] = useState("");
   const [playlistID, setPlaylistID] = useState("");
+  const tokenValue = useSelector((state) => state.auth.accessToken);
 
-  const tokenValue = useSelector((state) => state.token.value);
-  const userID = useSelector((state) => state.token.user);
+  useEffect(() => {
+    getUserId();
+  }, [userID]);
 
   const selectedHandle = (uri) => {
     setSelectedTrack((item) => item.filter((id) => id !== uri));
@@ -50,6 +52,22 @@ function Spotify() {
     ));
   };
 
+  const getUserId = async () => {
+    try {
+      const response = await axios.get("https://api.spotify.com/v1/me", {
+        headers: {
+          Authorization: "Bearer " + tokenValue,
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("User ID");
+      console.log(response.data.id);
+      setUserID(response.data.id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const createPlaylist = async () => {
     try {
       const response = await axios.post(
@@ -70,12 +88,13 @@ function Spotify() {
       console.log("Playlist ID");
       console.log(response.data.id);
       setPlaylistID(response.data.id);
+      addItemToPlaylist();
     } catch (error) {
       console.log(error);
     }
   };
 
-  const addItemToPlaylist = async () => {
+  const addItemToPlaylist = () => {
     try {
       let uri = selectedTrack;
       const data = {
@@ -89,7 +108,7 @@ function Spotify() {
         },
       };
 
-      const response = await axios.post(
+      const response = axios.post(
         `https://api.spotify.com/v1/playlists/${playlistID}/tracks`,
         data,
         header
@@ -112,7 +131,6 @@ function Spotify() {
       await createPlaylist();
       console.log(playlistID);
       console.log("add song");
-      await addItemToPlaylist();
     }
   };
 
@@ -121,13 +139,6 @@ function Spotify() {
 
   return (
     <div>
-      {/* {!tokenValue && (
-        <button>
-          <a href={AUTH_URL}>login</a>
-        </button>
-      )} */}
-
-      {/* {tokenValue ? ( */}
       <>
         <CreatePlaylist
           playlist={playlist}
@@ -138,9 +149,6 @@ function Spotify() {
         <Search handleOnChange={inputHandle} handleOnSubmit={searchHandle} />
         {renderTracks()}
       </>
-      {/* ) : (
-        <h2>Welcome</h2>
-      )} */}
     </div>
   );
 }
