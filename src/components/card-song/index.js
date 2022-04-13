@@ -1,4 +1,4 @@
-import "./style.css";
+import "./style.module.css";
 
 function CardSong({
   image,

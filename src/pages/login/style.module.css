@@ -1,0 +1,16 @@
+.wrapper {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  grid-auto-flow: row;
+}
+
+.button button {
+  margin: 20pxauto;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(7, 187, 127);
+  color: aliceblue;
+  font-weight: bold;
+}
