@@ -1,4 +1,3 @@
-import "./App.css";
 import Spotify from "./pages/home/index";
 import Login from "./pages/login/index";
 import NotFound from "./pages/not-found";
