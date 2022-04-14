@@ -1,9 +1,10 @@
 import "./style.css";
+import { FormControl, Button } from "@chakra-ui/react";
 
 const Search = ({ handleOnSubmit, handleOnChange }) => {
   return (
     <div className="formSearch">
-      <form onSubmit={handleOnSubmit}>
+      <FormControl onSubmit={handleOnSubmit}>
         <input
           className="inputSearch"
           id="gifname"
@@ -11,10 +12,10 @@ const Search = ({ handleOnSubmit, handleOnChange }) => {
           onChange={handleOnChange}
           placeholder="Search"
         />
-        <button className="buttonSearch" type="submit">
+        <Button colorScheme="teal" variant="solid" type="submit">
           Search
-        </button>
-      </form>
+        </Button>
+      </FormControl>
     </div>
   );
 };

@@ -3,12 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@chakra-ui/react": "^1.8.8",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
     "@reduxjs/toolkit": "^1.8.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",
     "axios": "^0.26.1",
+<<<<<<< HEAD
     "eslint": "^8.13.0",
+=======
+    "framer-motion": "^6",
+>>>>>>> check
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.8",
@@ -34,7 +41,13 @@
       "last 1 safari version"
     ]
   },
+<<<<<<< HEAD
   "devDependencies": {},
+=======
+  "devDependencies": {
+    "eslint": "^7.32.0"
+  },
+>>>>>>> check
   "main": "index.js",
   "repository": "https://github.com/rafiadw/hw-mod1-ses3-generasi-GIGIH.git",
   "author": "rafiadw <rafiadw@gmail.com>",
