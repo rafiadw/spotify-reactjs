@@ -1,20 +1,12 @@
 import login from "../../services/auth-login";
 import style from "./style.module.css";
-<<<<<<< HEAD
-=======
-//import { Heading, Box, Text, Button, Container } from "@chakra-ui/react";
->>>>>>> check
 
 function Login() {
   return (
     <div className={style.wrapper}>
       <div className={style.content}>
         <h1>Hello, there!</h1>
-<<<<<<< HEAD
         <p>Please, login. Before you using this web application</p>
-=======
-        <p></p>
->>>>>>> check
       </div>
       <div className={style.button}>
         <button onClick={() => login()}>Login</button>

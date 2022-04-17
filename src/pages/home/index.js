@@ -3,12 +3,13 @@ import React, { useEffect, useState } from "react";
 import CardSong from "../../components/card-song/index";
 import Search from "../../components/search-bar/index";
 import CreatePlaylist from "../../components/create-playlist/index";
-import useSearch from "../../hooks/useSearch";
+//import useSearch from "../../hooks/useSearch";
 import { useSelector } from "react-redux";
+import GetTracks from "../../services/search-track";
 
 function Spotify() {
-  const { tracks, inputHandle, searchHandle, selectedTrack, setSelectedTrack } =
-    useSearch();
+  // const { tracks, inputHandle, searchHandle, selectedTrack, setSelectedTrack } =
+  //   useSearch();
   const [playlist, setPlaylist] = useState({
     title: "",
     description: "",
@@ -16,22 +17,37 @@ function Spotify() {
   const [userID, setUserID] = useState("");
   const [playlistID, setPlaylistID] = useState("");
   const tokenValue = useSelector((state) => state.auth.accessToken);
+  const [searchQuery, setSearhcQuery] = useState("");
+  const [tracks, setTracks] = useState([]);
+  const [selectedTrack, setSelectedTrack] = useState([]);
 
   useEffect(() => {
     getUserId();
   }, [userID]);
 
   const selectedHandle = (uri) => {
-    setSelectedTrack((item) => item.filter((id) => id !== uri));
-  };
-
-  const deselectedHandle = (uri) => {
-    setSelectedTrack((item) => [...item, uri]);
+    if (selectedTrack.includes(uri)) {
+      setSelectedTrack((item) => item.filter((id) => id !== uri));
+    } else {
+      setSelectedTrack((item) => [...item, uri]);
+    }
   };
 
   const handleFormPlaylist = (event) => {
     const { name, value } = event.target;
     setPlaylist({ ...playlist, [name]: value });
+  };
+
+  const inputHandle = (e) => {
+    const inputValue = e.target.value;
+    setSearhcQuery(inputValue);
+  };
+
+  const searchHandle = async (e) => {
+    e.preventDefault();
+    GetTracks(tokenValue, searchQuery).then((res) =>
+      setTracks(res.data.tracks.items)
+    );
   };
 
   const renderTracks = () => {
@@ -42,11 +58,7 @@ function Spotify() {
         artist={item.album.artists[0]?.name}
         title={item.name}
         key={item.id}
-        selectedHandle={() =>
-          selectedTrack.includes(item.uri)
-            ? selectedHandle(item.uri)
-            : deselectedHandle(item.uri)
-        }
+        selectedHandle={() => selectedHandle(item.uri)}
         buttonName={selectedTrack.includes(item.uri) ? "deselect" : "select"}
       />
     ));
@@ -96,11 +108,9 @@ function Spotify() {
 
   const addItemToPlaylist = () => {
     try {
-      let uri = selectedTrack;
       const data = {
         uris: selectedTrack,
       };
-
       const header = {
         headers: {
           Authorization: "Bearer " + tokenValue,
@@ -127,7 +137,6 @@ function Spotify() {
       console.log("getUser");
       console.log(userID);
       console.log("create playlist");
-
       await createPlaylist();
       console.log(playlistID);
       console.log("add song");
@@ -145,7 +154,6 @@ function Spotify() {
           handleOnChange={handleFormPlaylist}
           handleOnSubmit={handleCreatePlaylist}
         />
-        {/* {renderPilih()} */}
         <Search handleOnChange={inputHandle} handleOnSubmit={searchHandle} />
         {renderTracks()}
       </>

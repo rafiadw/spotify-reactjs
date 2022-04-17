@@ -4,7 +4,7 @@ import { FormControl, Button } from "@chakra-ui/react";
 const Search = ({ handleOnSubmit, handleOnChange }) => {
   return (
     <div className="formSearch">
-      <FormControl onSubmit={handleOnSubmit}>
+      <form onSubmit={handleOnSubmit}>
         <input
           className="inputSearch"
           id="gifname"
@@ -12,10 +12,10 @@ const Search = ({ handleOnSubmit, handleOnChange }) => {
           onChange={handleOnChange}
           placeholder="Search"
         />
-        <Button colorScheme="teal" variant="solid" type="submit">
+        <button className="buttonSearch" type="submit">
           Search
-        </Button>
-      </FormControl>
+        </button>
+      </form>
     </div>
   );
 };

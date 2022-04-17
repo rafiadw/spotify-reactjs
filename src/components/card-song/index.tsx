@@ -1,4 +1,14 @@
 import "./style.css";
+import React from "react";
+
+type DataTrack = {
+  image: string,
+  album: string,
+  title: string,
+  artist: string,
+  selectedHandle: React.MouseEventHandler<HTMLButtonElement>,
+  buttonName: string,
+}
 
 function CardSong({
   image,
@@ -6,9 +16,8 @@ function CardSong({
   title,
   artist,
   selectedHandle,
-  toggleSelect,
   buttonName,
-}) {
+} : DataTrack) {
   return (
     <div className="cardSong">
       <div className="cardImage">
@@ -24,9 +33,7 @@ function CardSong({
         </p>
       </div>
       <div className="cardButton">
-        <button onClick={() => selectedHandle(toggleSelect)}>
-          {buttonName}
-        </button>
+        <button onClick={selectedHandle}>{buttonName}</button>
       </div>
     </div>
   );
