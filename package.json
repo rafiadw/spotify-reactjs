@@ -43,7 +43,8 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^7.32.0"
+    "eslint": "^7.32.0",
+    "msw": "^0.39.2"
   },
   "main": "index.js",
   "repository": "https://github.com/rafiadw/hw-mod1-ses3-generasi-GIGIH.git",

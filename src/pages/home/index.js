@@ -1,29 +1,26 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CardSong from "../../components/card-song/index";
 import Search from "../../components/search-bar/index";
-import CreatePlaylist from "../../components/create-playlist/index";
-//import useSearch from "../../hooks/useSearch";
+import FormCreatePlaylist from "../../components/form-create-playlist/index";
 import { useSelector } from "react-redux";
 import GetTracks from "../../services/search-track";
+import { createPlaylist } from "../../services/create-playlist";
+import { getUserId } from "../../services/get-user-id";
 
 function Spotify() {
-  // const { tracks, inputHandle, searchHandle, selectedTrack, setSelectedTrack } =
-  //   useSearch();
-  const [playlist, setPlaylist] = useState({
+  const initialState = {
     title: "",
     description: "",
-  });
-  const [userID, setUserID] = useState("");
-  const [playlistID, setPlaylistID] = useState("");
+  };
   const tokenValue = useSelector((state) => state.auth.accessToken);
-  const [searchQuery, setSearhcQuery] = useState("");
+  const [playlist, setPlaylist] = useState(initialState);
+  const [userID, setUserID] = useState("");
   const [tracks, setTracks] = useState([]);
   const [selectedTrack, setSelectedTrack] = useState([]);
 
   useEffect(() => {
-    getUserId();
-  }, [userID]);
+    getUserId(tokenValue).then((res) => setUserID(res.data.id));
+  }, []);
 
   const selectedHandle = (uri) => {
     if (selectedTrack.includes(uri)) {
@@ -38,17 +35,13 @@ function Spotify() {
     setPlaylist({ ...playlist, [name]: value });
   };
 
-  const inputHandle = (e) => {
-    const inputValue = e.target.value;
-    setSearhcQuery(inputValue);
-  };
-
-  const searchHandle = async (e) => {
+  async function searchHandle(e) {
     e.preventDefault();
-    GetTracks(tokenValue, searchQuery).then((res) =>
-      setTracks(res.data.tracks.items)
-    );
-  };
+    const query = e.target.query.value;
+    GetTracks(tokenValue, query)
+      .then((res) => res.data.tracks.items)
+      .then((data) => setTracks(data));
+  }
 
   const renderTracks = () => {
     return tracks.map((item) => (
@@ -64,97 +57,26 @@ function Spotify() {
     ));
   };
 
-  const getUserId = async () => {
-    try {
-      const response = await axios.get("https://api.spotify.com/v1/me", {
-        headers: {
-          Authorization: "Bearer " + tokenValue,
-          "Content-Type": "application/json",
-        },
-      });
-      console.log("User ID");
-      console.log(response.data.id);
-      setUserID(response.data.id);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const createPlaylist = async () => {
-    try {
-      const response = await axios.post(
-        `https://api.spotify.com/v1/users/${userID}/playlists`,
-        {
-          name: playlist.title,
-          description: playlist.description,
-          public: false,
-          collaborative: false,
-        },
-        {
-          headers: {
-            Authorization: "Bearer " + tokenValue,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log("Playlist ID");
-      console.log(response.data.id);
-      setPlaylistID(response.data.id);
-      addItemToPlaylist();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const addItemToPlaylist = () => {
-    try {
-      const data = {
-        uris: selectedTrack,
-      };
-      const header = {
-        headers: {
-          Authorization: "Bearer " + tokenValue,
-          "Content-Type": "application/json",
-        },
-      };
-
-      const response = axios.post(
-        `https://api.spotify.com/v1/playlists/${playlistID}/tracks`,
-        data,
-        header
-      );
-      console.log("response add music :", response);
-    } catch (error) {
-      alert(error);
-    }
-  };
-
-  const handleCreatePlaylist = async (e) => {
+  async function handleCreatePlaylist(e) {
     e.preventDefault();
     if (selectedTrack.length === 0) {
       alert("select track please");
     } else {
-      console.log("getUser");
-      console.log(userID);
-      console.log("create playlist");
-      await createPlaylist();
-      console.log(playlistID);
-      console.log("add song");
+      await createPlaylist(playlist, tokenValue, userID, selectedTrack);
+      alert("create playlist success");
     }
-  };
-
-  console.log("user id : ", userID);
-  console.log("playlist id : ", playlistID);
+    setPlaylist(initialState);
+  }
 
   return (
     <div>
       <>
-        <CreatePlaylist
+        <FormCreatePlaylist
           playlist={playlist}
           handleOnChange={handleFormPlaylist}
           handleOnSubmit={handleCreatePlaylist}
         />
-        <Search handleOnChange={inputHandle} handleOnSubmit={searchHandle} />
+        <Search handleOnSubmit={searchHandle} />
         {renderTracks()}
       </>
     </div>

@@ -7,9 +7,8 @@ const Search = ({ handleOnSubmit, handleOnChange }) => {
       <form onSubmit={handleOnSubmit}>
         <input
           className="inputSearch"
-          id="gifname"
+          id="query"
           type="text"
-          onChange={handleOnChange}
           placeholder="Search"
         />
         <button className="buttonSearch" type="submit">

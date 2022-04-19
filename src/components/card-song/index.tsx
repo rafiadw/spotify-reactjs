@@ -1,13 +1,16 @@
 import "./style.css";
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 
 type DataTrack = {
   image: string,
   album: string,
   title: string,
   artist: string,
-  selectedHandle: React.MouseEventHandler<HTMLButtonElement>,
+  uri: string,
   buttonName: string,
+  selectedHandle: React.MouseEventHandler<HTMLButtonElement>
 }
 
 function CardSong({
@@ -15,11 +18,24 @@ function CardSong({
   album,
   title,
   artist,
-  selectedHandle,
+  uri,
   buttonName,
+  selectedHandle
 } : DataTrack) {
+
+
+  //const selectedTrack = useSelector((state) => state.track);
+  // const selectedHandle = () => {
+  //   if (selectedTrack.some(item => item.uri === uri)) {
+  //     setSelectedTrack((item) => item.filter((id) => id !== uri));
+  //   } else {
+  //     setSelectedTrack((item) => [...item, uri]);
+  //   }
+  // };
+
+
   return (
-    <div className="cardSong">
+    <div data-testid="card-song" className="cardSong">
       <div className="cardImage">
         <img src={image} alt={title} />
       </div>

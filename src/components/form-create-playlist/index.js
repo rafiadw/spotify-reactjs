@@ -1,6 +1,6 @@
 import "./style.css";
 
-const CreatePlaylist = ({ playlist, handleOnChange, handleOnSubmit }) => {
+const FormCreatePlaylist = ({ playlist, handleOnChange, handleOnSubmit }) => {
   return (
     <form onSubmit={handleOnSubmit} className="formPlaylist">
       <input
@@ -33,4 +33,4 @@ const CreatePlaylist = ({ playlist, handleOnChange, handleOnSubmit }) => {
   );
 };
 
-export default CreatePlaylist;
+export default FormCreatePlaylist;
