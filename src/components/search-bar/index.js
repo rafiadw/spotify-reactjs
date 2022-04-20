@@ -1,7 +1,7 @@
 import "./style.css";
-import { FormControl, Button } from "@chakra-ui/react";
+//import { FormControl, Button } from "@chakra-ui/react";
 
-const Search = ({ handleOnSubmit, handleOnChange }) => {
+const Search = ({ handleOnSubmit, render }) => {
   return (
     <div className="formSearch">
       <form onSubmit={handleOnSubmit}>
@@ -15,6 +15,7 @@ const Search = ({ handleOnSubmit, handleOnChange }) => {
           Search
         </button>
       </form>
+      {render}
     </div>
   );
 };

@@ -2,6 +2,8 @@ import login from "../../services/auth-login";
 import style from "./style.module.css";
 
 function Login() {
+  console.log(process.env.SPOTIFY_API);
+  console.log(process.env.REACT_APP_SPOTIFY_API);
   return (
     <div className={style.wrapper}>
       <div className={style.content}>

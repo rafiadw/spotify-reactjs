@@ -1,5 +1,5 @@
 const login = () => {
-  const CLIENT_ID = "8f9fc624420548318eaed2f767f81eb0";
+  const CLIENT_ID = process.env.REACT_APP_SPOTIFY_API;
   const REDIRECT_URI = "http://localhost:3000/callback";
   const SCOPE = "playlist-modify-private";
   const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize";
