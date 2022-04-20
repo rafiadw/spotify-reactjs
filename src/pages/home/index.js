@@ -2,24 +2,29 @@ import { useEffect, useState } from "react";
 import CardSong from "../../components/card-song/index";
 import Search from "../../components/search-bar/index";
 import FormCreatePlaylist from "../../components/form-create-playlist/index";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import GetTracks from "../../services/search-track";
 import { createPlaylist } from "../../services/create-playlist";
 import { getUserId } from "../../services/get-user-id";
+import { logout, profile } from "../../redux/auth-slicer";
 
 function Spotify() {
   const initialState = {
     title: "",
     description: "",
   };
-  const tokenValue = useSelector((state) => state.auth.accessToken);
+  const { tokenValue, profile } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const [playlist, setPlaylist] = useState(initialState);
-  const [userID, setUserID] = useState("");
+  const [userID, setUserID] = useState({});
   const [tracks, setTracks] = useState([]);
   const [selectedTrack, setSelectedTrack] = useState([]);
 
   useEffect(() => {
-    getUserId(tokenValue).then((res) => setUserID(res.data.id));
+    getUserId(tokenValue)
+      .then((res) => res.data)
+      .then((data) => dispatch(profile(data)));
+    console.log(profile);
   }, []);
 
   const selectedHandle = (uri) => {
@@ -38,9 +43,7 @@ function Spotify() {
   async function searchHandle(e) {
     e.preventDefault();
     const query = e.target.query.value;
-    GetTracks(tokenValue, query)
-      .then((res) => res.data.tracks.items)
-      .then((data) => setTracks(data));
+    GetTracks(tokenValue, query).then((data) => setTracks(data));
   }
 
   const renderTracks = () => {

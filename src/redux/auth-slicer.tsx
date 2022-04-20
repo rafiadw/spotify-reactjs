@@ -1,9 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+type stateType = {
+  isLogin: boolean,
+  accessToken: string,
+  userStore: object
+};
+
+const initialState: stateType = {
   isLogin: false,
   accessToken: "",
-  userStore: "",
+  userStore: {},
 };
 
 const tokenSlice = createSlice({
@@ -15,12 +21,11 @@ const tokenSlice = createSlice({
       state.accessToken = action.payload;
     },
     logout: () => initialState,
-    userProfile: (state, action) => {
+    profile: (state, action) => {
       state.userStore = action.payload;
     },
   },
 });
 
-export const { login, logout, userProfile } = tokenSlice.actions;
-
+export const { login, logout, profile } = tokenSlice.actions;
 export default tokenSlice.reducer;

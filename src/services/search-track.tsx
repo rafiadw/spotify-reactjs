@@ -10,7 +10,7 @@ const  GetTracks = async (token : string, query : string) => {
             type: "track",
           },
         });
-        return res.data.tracks.items;
+        return res.data.tracks.items
 }
 
 export default GetTracks;

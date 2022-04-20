@@ -13,8 +13,7 @@ import {
 } from "react-router-dom";
 
 function App() {
-  const isLogin = useSelector((state) => state.auth.isLogin);
-  const token = useSelector((state) => state.auth.accessToken);
+  const { isLogin, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
