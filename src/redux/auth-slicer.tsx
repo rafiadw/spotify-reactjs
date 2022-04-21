@@ -1,12 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-type stateType = {
-  isLogin: boolean,
-  accessToken: string,
-  userStore: object
-};
 
-const initialState: stateType = {
+const initialState: {isLogin: boolean,
+  accessToken: string,
+  userStore: object}= {
   isLogin: false,
   accessToken: "",
   userStore: {},

@@ -1,16 +1,12 @@
 import "./style.css";
 import React from "react";
 
-type DataTrack = {
-  image: string,
+function CardSong({image,album,title,artist,buttonName,selectedHandle} : {image: string,
   album: string,
   title: string,
   artist: string,
   buttonName: string,
-  selectedHandle: React.MouseEventHandler<HTMLButtonElement>
-}
-
-function CardSong({image,album,title,artist,buttonName,selectedHandle} : DataTrack): JSX.Element {
+  selectedHandle: React.MouseEventHandler<HTMLButtonElement>}): JSX.Element {
 return (
     <div data-testid="card-song" className="cardSong">
       <div className="cardImage">
