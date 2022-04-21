@@ -6,25 +6,24 @@ import { useSelector, useDispatch } from "react-redux";
 import GetTracks from "../../services/search-track";
 import { createPlaylist } from "../../services/create-playlist";
 import { getUserId } from "../../services/get-user-id";
-import { logout, profile } from "../../redux/auth-slicer";
+import Welcome from "../../components/welcome/index";
+import { logout } from "../../redux/auth-slicer";
 
 function Spotify() {
   const initialState = {
     title: "",
     description: "",
   };
-  const { tokenValue, profile } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
+  const tokenValue = useSelector((state) => state.auth.accessToken);
   const [playlist, setPlaylist] = useState(initialState);
-  const [userID, setUserID] = useState({});
+  const [userID, setUserID] = useState("");
   const [tracks, setTracks] = useState([]);
   const [selectedTrack, setSelectedTrack] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getUserId(tokenValue)
-      .then((res) => res.data)
-      .then((data) => dispatch(profile(data)));
-    console.log(profile);
+    getUserId(tokenValue).then((res) => setUserID(res.data));
+    console.log(userID);
   }, []);
 
   const selectedHandle = (uri) => {
@@ -43,7 +42,9 @@ function Spotify() {
   async function searchHandle(e) {
     e.preventDefault();
     const query = e.target.query.value;
-    GetTracks(tokenValue, query).then((data) => setTracks(data));
+    GetTracks(tokenValue, query).then((res) =>
+      setTracks(res.data.tracks.items)
+    );
   }
 
   const renderTracks = () => {
@@ -74,6 +75,7 @@ function Spotify() {
   return (
     <div>
       <>
+        <Welcome name={userID.display_name} logout={() => dispatch(logout())} />
         <FormCreatePlaylist
           playlist={playlist}
           handleOnChange={handleFormPlaylist}

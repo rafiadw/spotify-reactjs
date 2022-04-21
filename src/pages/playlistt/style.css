@@ -1,0 +1,9 @@
+.create-playlist {
+  width: 150px;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(206, 53, 42);
+  color: white;
+  font-weight: bold;
+}

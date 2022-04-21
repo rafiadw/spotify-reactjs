@@ -1,6 +1,7 @@
 import Spotify from "./pages/home/index";
 import Login from "./pages/login/index";
 import NotFound from "./pages/not-found";
+import ListPlaylist from "./pages/playlistt/index";
 import getTokenURL from "./services/get-token";
 import { useSelector, useDispatch } from "react-redux";
 import { login } from "./redux/auth-slicer";
@@ -20,8 +21,6 @@ function App() {
     if (!isLogin && window.location.hash) {
       dispatch(login(getTokenURL(window.location.hash)));
     }
-    console.log(isLogin);
-    console.log("token value:", token);
   }, [isLogin]);
 
   return (
@@ -29,6 +28,9 @@ function App() {
       <Switch>
         <Route path="/create-playlist">
           {isLogin ? <Spotify /> : <Redirect to="/" />}
+        </Route>
+        <Route path="/list-playlist">
+          {isLogin ? <ListPlaylist /> : <Redirect to="/" />}
         </Route>
         <Route path="/">
           {isLogin ? <Redirect to="/create-playlist" /> : <Login />}

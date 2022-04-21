@@ -22,7 +22,7 @@ return (
         </p>
         <h1>{title}</h1>
         <p>
-          Artists <strong>{artist}</strong>
+          by <strong>{artist}</strong>
         </p>
       </div>
       <div className="cardButton">

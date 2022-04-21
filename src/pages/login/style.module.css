@@ -1,8 +1,13 @@
 .wrapper {
   display: grid;
-  justify-content: center;
-  align-content: center;
+  align-items: center;
   grid-auto-flow: row;
+  width: 400px;
+  margin: 70px auto;
+}
+
+.content h1 {
+  font-size: medium;
 }
 
 .button button {

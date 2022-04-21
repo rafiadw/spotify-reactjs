@@ -3,7 +3,7 @@ import "./style.css";
 
 const Search = ({ handleOnSubmit, render }) => {
   return (
-    <div className="formSearch">
+    <div className="search-wrapper">
       <form onSubmit={handleOnSubmit}>
         <input
           className="inputSearch"

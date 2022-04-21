@@ -1,6 +1,7 @@
-.formSearch {
-  margin: 20px auto 0 auto;
+.search-wrapper {
+  margin: 20px auto;
   width: 600px;
+  text-align: center;
 }
 
 .inputSearch {
