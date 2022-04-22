@@ -28,8 +28,6 @@ function Spotify() {
     getUserId(tokenValue).then((res) => dispatch(setProfile(res.data)));
   }, []);
 
-  console.log(selectedTrack);
-
   const selectedHandle = (uri) => {
     if (selectedTrack.includes(uri)) {
       dispatch(setSelectedTrack(selectedTrack.filter((item) => item !== uri)));
