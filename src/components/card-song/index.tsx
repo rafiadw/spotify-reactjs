@@ -1,11 +1,12 @@
 import "./style.css";
 import React from "react";
 
-function CardSong({image,album,title,artist,buttonName,selectedHandle} : {image: string,
+function CardSong({image,album,title,artist,buttonName, duration,selectedHandle} : {image: string,
   album: string,
   title: string,
   artist: string,
   buttonName: string,
+  duration: string,
   selectedHandle: React.MouseEventHandler<HTMLButtonElement>}): JSX.Element {
 return (
     <div data-testid="card-song" className="cardSong">
@@ -17,8 +18,9 @@ return (
           Album <strong>{album}</strong>
         </p>
         <h1>{title}</h1>
+        <p>Duration : <b>{duration}</b></p>
         <p>
-          by <strong>{artist}</strong>
+          by <strong>{artist}</strong>  
         </p>
       </div>
       <div className="cardButton">

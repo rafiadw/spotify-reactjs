@@ -49,6 +49,12 @@ function Spotify() {
       .then((data) => dispatch(setTracks(data)));
   }
 
+  function msToMinutenSecond(millis) {
+    var minutes = Math.floor(millis / 60000);
+    var seconds = ((millis % 60000) / 1000).toFixed(0);
+    return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+  }
+
   const renderTracks = () => {
     return tracks.map((item) => (
       <CardSong
@@ -56,6 +62,7 @@ function Spotify() {
         album={item.album.name}
         artist={item.album.artists[0]?.name}
         title={item.name}
+        duration={msToMinutenSecond(item.duration_ms)}
         key={item.id}
         selectedHandle={() => selectedHandle(item.uri)}
         buttonName={selectedTrack.includes(item.uri) ? "deselect" : "select"}
