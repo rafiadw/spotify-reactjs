@@ -3,10 +3,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: {isLogin: boolean,
   accessToken: string,
-  userStore: object}= {
+  profile: object}= {
   isLogin: false,
   accessToken: "",
-  userStore: {},
+  profile: {},
 };
 
 const tokenSlice = createSlice({
@@ -18,12 +18,12 @@ const tokenSlice = createSlice({
       state.accessToken = action.payload;
     },
     logout: () => initialState,
-    profile: (state, action) => {
-      state.userStore = action.payload;
+    setProfile: (state, action) => {
+      state.profile = action.payload;
     },
   },
 });
 
-export const { login, logout, profile } = tokenSlice.actions;
+export const { login, logout, setProfile } = tokenSlice.actions;
 
 export default tokenSlice.reducer;

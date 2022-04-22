@@ -8,8 +8,10 @@ const Search = ({ handleOnSubmit, render }) => {
         <input
           className="inputSearch"
           id="query"
+          name="query"
           type="text"
           placeholder="Search"
+          required
         />
         <button className="buttonSearch" type="submit">
           Search

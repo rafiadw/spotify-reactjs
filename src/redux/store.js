@@ -5,6 +5,6 @@ import trackReducer from "./track-slice";
 export default configureStore({
   reducer: {
     auth: authReducer,
-    tracks: trackReducer,
+    track: trackReducer,
   },
 });
