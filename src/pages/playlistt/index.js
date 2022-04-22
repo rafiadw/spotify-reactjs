@@ -18,7 +18,6 @@ const ListPlaylist = () => {
     await UnfollowPlaylist(tokenValue, id);
   };
 
-  console.log(lists);
   const renderPlaylist = () => {
     return lists.map((item) => (
       <CardSong
