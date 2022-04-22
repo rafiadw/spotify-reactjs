@@ -7,7 +7,7 @@ Simple Spotify Project was made for Generasi Gigih Kampus Merdeka Batch 2
 - Spotify login auth
 - log out
 - Search Playlist
-- Create Playlist
+- Select and Create Playlist
 - View Playlist
 - Unfollow/Delete Playlist
 - Display user name
@@ -15,6 +15,8 @@ Simple Spotify Project was made for Generasi Gigih Kampus Merdeka Batch 2
 ## Testing
 
 - Card Song Component
+- Search Component
+- Browser Mock Current User API
 
 ## Getting Started
 
@@ -48,6 +50,8 @@ REACT_APP_SPOTIFY_API=
 yarn add `package`
 ```
 
+or
+
 ```npm
 npm install `package`
 ```
@@ -57,6 +61,8 @@ npm install `package`
 ```yarn
 yarn start
 ```
+
+or
 
 ```npm
 npm start

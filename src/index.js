@@ -6,6 +6,12 @@ import store from "./redux/store";
 import { Provider } from "react-redux";
 import { ChakraProvider } from "@chakra-ui/react";
 
+if (process.env.NODE_ENV === "development") {
+  const { workerTracks, workerUser } = require("./mocks/browser");
+  workerTracks.start();
+  workerUser.start();
+}
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
