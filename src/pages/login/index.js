@@ -2,6 +2,7 @@ import login from "../../services/auth-login";
 import style from "./style.module.css";
 
 function Login() {
+  console.log("halo");
   return (
     <div className={style.wrapper}>
       <div className={style.content}>

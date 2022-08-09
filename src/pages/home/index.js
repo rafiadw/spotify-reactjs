@@ -21,7 +21,6 @@ function Spotify() {
   let selectedTrack = useSelector((state) => state.track.selected);
   let tracks = useSelector((state) => state.track.tracks);
   const [playlist, setPlaylist] = useState(initialState);
-  //const [tempTracks, setTempTracks] = useState([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
