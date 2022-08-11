@@ -23,7 +23,7 @@ Simple Spotify Project was made for Generasi Gigih Kampus Merdeka Batch 2
 ### 1. Clone This Github Repository
 
 ```clone
-git clone https://github.com/rafiadw/hw-mod1-ses3-generasi-GIGIH.git
+git clone https://github.com/rafiadw/spotify-reactjs.git
 ```
 
 ### 2. Open Folder Which Have Cloned Before
